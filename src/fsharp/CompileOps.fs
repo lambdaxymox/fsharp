@@ -2644,7 +2644,7 @@ type TcConfigBuilder =
         | None ->
             // If the explicit framework has not been inferred by the first-non-comment rule
             // then it can't be set by any other means.
-            warning(Error(FSComp.SR.optsExplicitFrameworkNotFirstDeclaration(fx1, fx), m))
+            warning(Error(FSComp.SR.optsExplicitFrameworkNotFirstDeclaration(), m))
     
     static member SplitCommandLineResourceInfo (ri: string) =
         let p = ri.IndexOf ','
