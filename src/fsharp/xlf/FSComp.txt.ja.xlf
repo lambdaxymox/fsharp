@@ -617,6 +617,11 @@
         <target state="new">Invalid directive. Expected '#I \"&lt;path&gt;\"'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="buildInvalidHashNetDirective">
+        <source>#netfx and #netcore directives may only occur in F# script files.</source>
+        <target state="new">#netfx and #netcore directives may only occur in F# script files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="buildInvalidHashloadDirective">
         <source>Invalid directive. Expected '#load \"&lt;file&gt;\" ... \"&lt;file&gt;\"'.</source>
         <target state="new">Invalid directive. Expected '#load \"&lt;file&gt;\" ... \"&lt;file&gt;\"'.</target>

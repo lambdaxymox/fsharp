@@ -73,6 +73,7 @@ module GoToDefinitionServiceTests =
             UseScriptResolutionRules = false
             LoadTime = DateTime.MaxValue
             OriginalLoadReferences = []
+            ExplicitFrameworkForScript = None
             UnresolvedReferences = None
             ExtraProjectInfo = None
             Stamp = None

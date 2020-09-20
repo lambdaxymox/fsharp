@@ -908,6 +908,10 @@ rule token args skip = parse
      if not skip then HASH_LIGHT (LexCont.Token (args.ifdefStack, args.stringNest))
      else token args skip lexbuf } 
    
+ | "#netfx" | "#netcore"
+   { if not skip then HASH_FX (LexCont.Token(args.ifdefStack, args.stringNest))
+     else token args skip lexbuf } 
+
  | anywhite* "#if" anywhite+ anystring
    { let m = lexbuf.LexemeRange   
      let lookup id = List.contains id args.defines

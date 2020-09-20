@@ -51,6 +51,7 @@ type Worker () =
         UseScriptResolutionRules = true
         LoadTime = DateTime.MaxValue
         OriginalLoadReferences = []
+        ExplicitFrameworkForScript = None
         UnresolvedReferences = None
         ExtraProjectInfo = None
         Stamp = None

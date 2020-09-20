@@ -219,6 +219,7 @@ let main argv = 0"""
             LoadTime = DateTime()
             UnresolvedReferences = None
             OriginalLoadReferences = []
+            ExplicitFrameworkForScript = None
             ExtraProjectInfo = None
             Stamp = None
         }
