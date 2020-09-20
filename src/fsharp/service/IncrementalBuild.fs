@@ -1753,15 +1753,21 @@ type IncrementalBuilder(tcGlobals, frameworkTcImports, nonFrameworkAssemblyInput
     /// CreateIncrementalBuilder (for background type checking). Note that fsc.fs also
     /// creates an incremental builder used by the command line compiler.
     static member TryCreateIncrementalBuilderForProjectOptions
-                      (ctok, legacyReferenceResolver, defaultFSharpBinariesDir,
+                      (ctok,
+                       legacyReferenceResolver,
+                       defaultFSharpBinariesDir,
                        frameworkTcImportsCache: FrameworkImportsCache,
                        loadClosureOpt: LoadClosure option,
                        sourceFiles: string list,
                        commandLineArgs: string list,
-                       projectReferences, projectDirectory,
-                       useScriptResolutionRules, keepAssemblyContents,
-                       keepAllBackgroundResolutions, maxTimeShareMilliseconds,
-                       tryGetMetadataSnapshot, suggestNamesForErrors,
+                       projectReferences,
+                       projectDirectory,
+                       useScriptResolutionRules,
+                       keepAssemblyContents,
+                       keepAllBackgroundResolutions,
+                       maxTimeShareMilliseconds,
+                       tryGetMetadataSnapshot,
+                       suggestNamesForErrors,
                        keepAllBackgroundSymbolUses,
                        enableBackgroundItemKeyStoreAndSemanticClassification,
                        dependencyProviderOpt) =
@@ -1800,7 +1806,8 @@ type IncrementalBuilder(tcGlobals, frameworkTcImports, nonFrameworkAssemblyInput
                          isInteractive=useScriptResolutionRules, 
                          isInvalidationSupported=true, 
                          defaultCopyFSharpCore=CopyFSharpCoreFlag.No, 
-                         tryGetMetadataSnapshot=tryGetMetadataSnapshot) 
+                         tryGetMetadataSnapshot=tryGetMetadataSnapshot,
+                         explicitFrameworkForScripts=None) 
 
                 tcConfigB.resolutionEnvironment <- (ReferenceResolver.ResolutionEnvironment.EditingOrCompilation true)
 

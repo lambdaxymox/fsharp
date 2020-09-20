@@ -3,8 +3,8 @@
   <file datatype="xml" source-language="en" target-language="tr" original="../FSComp.resx">
     <body>
       <trans-unit id="buildInvalidHashNetDirective">
-        <source>#netfx and #netcore directives may only occur in F# script files.</source>
-        <target state="new">#netfx and #netcore directives may only occur in F# script files.</target>
+        <source>Explicit framework declarations may only occur in F# script files.</source>
+        <target state="new">Explicit framework declarations may only occur in F# script files.</target>
         <note />
       </trans-unit>
       <trans-unit id="chkFeatureNotLanguageSupported">
@@ -202,6 +202,16 @@
         <target state="new">Invalid directive '#{0} {1}'</target>
         <note />
       </trans-unit>
+      <trans-unit id="fsiWrongFrameworkNetCore">
+        <source>This script is executing using .NET Core, but .NET Framework has been specified.</source>
+        <target state="new">This script is executing using .NET Core, but .NET Framework has been specified.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="fsiWrongFrameworkNetFx">
+        <source>This script is executing using .NET Framework, but .NET Core has been specified.</source>
+        <target state="new">This script is executing using .NET Framework, but .NET Core has been specified.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="lexByteStringMayNotBeInterpolated">
         <source>a byte string may not be interpolated</source>
         <target state="new">a byte string may not be interpolated</target>
@@ -230,6 +240,16 @@
       <trans-unit id="nativeResourceHeaderMalformed">
         <source>Resource header beginning at offset {0} is malformed.</source>
         <target state="translated">{0} uzaklığında başlayan kaynak üst bilgisi hatalı biçimlendirilmiş.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="optsExplicitFrameworkNotFirstDeclaration">
+        <source>Scripts requiring explicit frameworks should have '#netfx' or '#netcore' as their first non-whitespace, non-comment line.</source>
+        <target state="new">Scripts requiring explicit frameworks should have '#netfx' or '#netcore' as their first non-whitespace, non-comment line.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="optsIncompatibleFrameworks">
+        <source>This script either implicitly or explicitly targets '{0}' but references a script explicitly targeting an incompatible framework '{1}'. Scripts requiring explicit frameworks should have '#netfx' or '#netcore' as their first non-whitespace, non-comment line.</source>
+        <target state="new">This script either implicitly or explicitly targets '{0}' but references a script explicitly targeting an incompatible framework '{1}'. Scripts requiring explicit frameworks should have '#netfx' or '#netcore' as their first non-whitespace, non-comment line.</target>
         <note />
       </trans-unit>
       <trans-unit id="optsLangVersion">

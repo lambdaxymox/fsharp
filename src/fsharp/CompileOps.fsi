@@ -286,6 +286,7 @@ type TcConfigBuilder =
       mutable includes: string list
       mutable implicitOpens: string list
       mutable useFsiAuxLib: bool
+      mutable explicitFrameworkForScripts : string option
       mutable framework: bool
       mutable resolutionEnvironment: ReferenceResolver.ResolutionEnvironment
       mutable implicitlyResolveAssemblies: bool
@@ -425,18 +426,30 @@ type TcConfigBuilder =
         isInteractive: bool * 
         isInvalidationSupported: bool *
         defaultCopyFSharpCore: CopyFSharpCoreFlag *
-        tryGetMetadataSnapshot: ILReaderTryGetMetadataSnapshot
+        tryGetMetadataSnapshot: ILReaderTryGetMetadataSnapshot *
+        explicitFrameworkForScripts: string option
           -> TcConfigBuilder
 
     member DecideNames: string list -> outfile: string * pdbfile: string option * assemblyName: string 
+
     member TurnWarningOff: range * string -> unit
+
     member TurnWarningOn: range * string -> unit
+
+    member SetExplicitFramework: m: range * fx: string -> unit
+
     member AddIncludePath: range * string * string -> unit
+
     member AddCompilerToolsByPath: string -> unit
+
     member AddReferencedAssemblyByPath: range * string -> unit
+
     member RemoveReferencedAssemblyByPath: range * string -> unit
+
     member AddEmbeddedSourceFile: string -> unit
+
     member AddEmbeddedResource: string -> unit
+
     member AddPathMapping: oldPrefix: string * newPrefix: string -> unit
 
     static member SplitCommandLineResourceInfo: string -> string * string * ILResourceAccess
@@ -458,6 +471,7 @@ type TcConfig =
     member includes: string list
     member implicitOpens: string list
     member useFsiAuxLib: bool
+    member explicitFrameworkForScripts: string option
     member framework: bool
     member implicitlyResolveAssemblies: bool
     /// Set if the user has explicitly turned indentation-aware syntax on/off
@@ -744,6 +758,7 @@ val RequireDLL: CompilationThreadToken * TcImports * TcEnv * thisAssemblyName: s
 /// A general routine to process hash directives
 val ProcessMetaCommandsFromInput : 
     (('T -> range * string -> 'T) * 
+     ('T -> range * string -> 'T) *
      ('T -> range * string * Directive -> 'T) *
      ('T -> range * string -> unit))
       -> TcConfigBuilder * ParsedInput * string * 'T 

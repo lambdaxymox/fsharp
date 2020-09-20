@@ -66,6 +66,8 @@ open Microsoft.DotNet.DependencyManager
 // For the FSI as a service methods...
 //----------------------------------------------------------------------------
 
+let runningOnNetFx = (typeof<obj>.Assembly.GetName().Name <> "mscorlib")
+
 type FsiValue(reflectionValue:obj, reflectionType:Type, fsharpType:FSharpType) = 
   member x.ReflectionValue = reflectionValue
   member x.ReflectionType = reflectionType
@@ -1517,6 +1519,7 @@ type internal FsiDynamicCompiler
            (fun () ->
                ProcessMetaCommandsFromInput 
                    ((fun st (m,nm) -> tcConfigB.TurnWarningOff(m,nm); st),
+                    (fun st (m,nm) -> tcConfigB.SetExplicitFramework(m,nm); st),
                     (fun st (m, path, directive) -> 
 
                         let dm = tcImports.DependencyProvider.TryFindDependencyManagerInPath(tcConfigB.compilerToolPaths, getOutputDir tcConfigB, reportError m, path)
@@ -2209,6 +2212,16 @@ type internal FsiInteractionProcessor
             | IHash (ParsedHashDirective("i", [path], m), _) -> 
                 packageManagerDirective Directive.Include path m
 
+            | IHash (ParsedHashDirective("netfx", [], m), _) -> 
+                if not runningOnNetFx then
+                    warning(Error(FSComp.SR.fsiWrongFrameworkNetCore(), m))
+                istate,Completed None
+
+            | IHash (ParsedHashDirective("netcore", [], m), _) -> 
+                if runningOnNetFx then
+                    warning(Error(FSComp.SR.fsiWrongFrameworkNetFx(), m))
+                istate,Completed None
+
             | IHash (ParsedHashDirective("I", [path], m), _) -> 
                 tcConfigB.AddIncludePath (m, path, tcConfig.implicitIncludeDir)
                 fsiConsoleOutput.uprintnfnn "%s" (FSIstrings.SR.fsiDidAHashI(tcConfig.MakePathAbsolute path))
@@ -2752,7 +2765,9 @@ type FsiEvaluationSession (fsi: FsiEvaluationSessionHostConfig, argv:string[], i
             isInteractive=true, 
             isInvalidationSupported=false, 
             defaultCopyFSharpCore=CopyFSharpCoreFlag.No, 
-            tryGetMetadataSnapshot=tryGetMetadataSnapshot)
+            tryGetMetadataSnapshot=tryGetMetadataSnapshot,
+            explicitFrameworkForScripts=Some(if runningOnNetFx then "netfx" else "netcore")
+         )
 
     let tcConfigP = TcConfigProvider.BasedOnMutableBuilder(tcConfigB)
     do tcConfigB.resolutionEnvironment <- ResolutionEnvironment.CompilationAndEvaluation // See Bug 3608
@@ -2761,7 +2776,7 @@ type FsiEvaluationSession (fsi: FsiEvaluationSessionHostConfig, argv:string[], i
 #if NETSTANDARD
     do tcConfigB.useSdkRefs <- true
     do tcConfigB.useSimpleResolution <- true
-    do SetTargetProfile tcConfigB "netcore" // always assume System.Runtime codegen
+    do if not runningOnNetFx then SetTargetProfile tcConfigB "netcore" // always assume System.Runtime codegen
 #endif
 
     // Preset: --optimize+ -g --tailcalls+ (see 4505)

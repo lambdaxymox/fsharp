@@ -231,6 +231,11 @@ let AdjustForScriptCompile(ctok, tcConfigB: TcConfigBuilder, commandLineSourceFi
                    (ctok, tcConfig, [filename, rangeStartup], CodeContext.Compilation, 
                     lexResourceManager, dependencyProvider)
 
+            match closure.ExplicitFrameworkForScript with 
+            | Some s when s.StartsWith("netcore") ->
+                SetTargetProfile tcConfigB "netcore" // assume System.Runtime codegen
+            | _ -> ()
+
             // Record the references from the analysis of the script. The full resolutions are recorded as the corresponding #I paths used to resolve them
             // are local to the scripts and not added to the tcConfigB (they are added to localized clones of the tcConfigB).
             let references =
@@ -1751,7 +1756,9 @@ let main0(ctok, argv, legacyReferenceResolver, bannerAlreadyPrinted,
           reduceMemoryUsage=reduceMemoryUsage, implicitIncludeDir=directoryBuildingFrom, 
           isInteractive=false, isInvalidationSupported=false, 
           defaultCopyFSharpCore=defaultCopyFSharpCore, 
-          tryGetMetadataSnapshot=tryGetMetadataSnapshot)
+          tryGetMetadataSnapshot=tryGetMetadataSnapshot,
+          // note - this may later be updated via script closure
+          explicitFrameworkForScripts=None)
 
     // Preset: --optimize+ -g --tailcalls+ (see 4505)
     SetOptimizeSwitch tcConfigB OptionSwitch.On
@@ -1951,7 +1958,8 @@ let main0OfAst (ctok, legacyReferenceResolver, reduceMemoryUsage, assemblyName, 
             reduceMemoryUsage=reduceMemoryUsage, implicitIncludeDir=Directory.GetCurrentDirectory(), 
             isInteractive=false, isInvalidationSupported=false, 
             defaultCopyFSharpCore=CopyFSharpCoreFlag.No, 
-            tryGetMetadataSnapshot=tryGetMetadataSnapshot)
+            tryGetMetadataSnapshot=tryGetMetadataSnapshot,
+            explicitFrameworkForScripts=None)
 
     let primaryAssembly =
         // temporary workaround until https://github.com/dotnet/fsharp/pull/8043 is merged:
